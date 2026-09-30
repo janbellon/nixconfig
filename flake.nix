@@ -1,15 +1,20 @@
 {
-  description = "Default NixOS System";
+  description = "NixOS Configuration - Modular Setup";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   };
-  outputs = { self, nixpkgs }: {
-    nixosConfigurations.nix1 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration.nix
-      ];
+
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations = {
+      # Machine principale
+      manu = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/manu
+        ];
+      };
     };
   };
 }
